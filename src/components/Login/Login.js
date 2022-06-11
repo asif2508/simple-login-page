@@ -1,55 +1,39 @@
 import React, { useRef, useState } from 'react';
-import {Button, Col, Container, Form, Image, Row} from 'react-bootstrap';
-import auth from '../../firebase.init';
-import { useSendPasswordResetEmail, useSignInWithEmailAndPassword} from 'react-firebase-hooks/auth';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
+import { toast, ToastContainer } from 'react-toastify';
 import './Login.css';
 const Login = () => {
-    const [
-        signInWithEmailAndPassword,
-        user,
-        loading,
-        error,
-      ] = useSignInWithEmailAndPassword(auth);
-      const [sendPasswordResetEmail] = useSendPasswordResetEmail(auth);
-      const navigate = useNavigate();
-      const emailRef = useRef('');
-      const passwordRef = useRef('');
-      const [message, setMessage] = useState('');
+    const emailRef = useRef('');
+    const passwordRef = useRef('');
+    const [message] = useState('');
 
-      let location = useLocation();
-      let from = location.state?.from?.pathname || "/";
-    //   if(loading ){
-    //       return <Loading></Loading>
-    //   }
-      if(user){
-        navigate(from, { replace: true });;
-      }
-      
-    const handleSignIn =async event =>{
+    const handleSignIn = async event => {
         event.preventDefault();
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
-        await signInWithEmailAndPassword(email, password);
-    }
-
-    const handlePasswordReset = async event =>{
-        event.preventDefault();
-        const email = emailRef.current.value;
-        if(email){
-            await sendPasswordResetEmail(email);
-            toast("Password reset email sent!")
+        const data = {
+            email: email,
+            password: password
         }
-        else{
-            setMessage("Enter your email!");
-        }
+        fetch('https://mighty-fortress-51207.herokuapp.com/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                toast(JSON.stringify(data));
+            });
+        event.target.reset();
     }
     return (
         <div>
-             <Container fluid>
+            <Container>
                 <Row>
-                <Col xs={12} md={5} lg={5}>
+                    <Col xs={12} md={5} lg={5}>
                         <div className="login-style">
                             <h3 className='text-center'>WELCOME BACK</h3>
                             <p className='text-center mt-0 pt-0'><small>Login to Your Account</small></p>
@@ -60,7 +44,6 @@ const Login = () => {
                                         id="floatingInputCustom"
                                         type="email"
                                         placeholder="name@example.com"
-                                        required
                                     />
                                     <label htmlFor="floatingInputCustom">Email address</label>
                                 </Form.Floating>
@@ -70,13 +53,11 @@ const Login = () => {
                                         type="password"
                                         ref={passwordRef}
                                         placeholder="Password"
-                                        required
                                     />
                                     <label htmlFor="floatingPasswordCustom">Password</label>
                                 </Form.Floating>
-                                {error && <p className='text-start text-danger'>{error.message}</p> }
-                                {message && <p className='text-start text-danger'>{message}</p> }
-                                
+                                {message && <p className='text-start text-danger'>{message}</p>}
+
                                 <Button className='login-btn mt-3' type="submit">
                                     Login
                                 </Button>
@@ -84,17 +65,21 @@ const Login = () => {
                                     <Form.Group className="" controlId="formBasicCheckbox">
                                         <Form.Check type="checkbox" label="Remember me" />
                                     </Form.Group>
-                                    <Button onClick={handlePasswordReset} className='link-style' variant="link">Forgot Password</Button>
+                                    <Form.Group className="" controlId="formBasicCheckbox">
+                                        <Button className='link-style' variant="link">Forgot Password</Button>
+                                    </Form.Group>
+                                    
                                 </div>
                             </Form>
                         </div>
-                        
+
                     </Col>
-                    <Col xs={12} md={7} lg={7}>
-                        <Image src="https://img.freepik.com/free-vector/tablet-login-concept-illustration_114360-7963.jpg?t=st=1650196997~exp=1650197597~hmac=178220bfbffdc22f466d193620b9c5e061140006c40c9d2efeea9656063e7d59&w=740" alt="" width="80%" />
+                    <Col xs={12} md={7} lg={7} className='img-style'>
+                        <Image src="https://img.freepik.com/free-vector/sign-concept-illustration_114360-5267.jpg?t=st=1654970589~exp=1654971189~hmac=0c92b6cfdf238987b74c9d9f3879d556fed49b03ab404706886fa463bdacd36b&w=740" alt="" width="90%" />
                     </Col>
                 </Row>
             </Container>
+            <ToastContainer></ToastContainer>
         </div>
     );
 };
