@@ -1,0 +1,14 @@
+.nav-btn1{
+    background-color: rgb(37, 17, 104);
+    padding: 3px 20px;
+    color: white;
+    border: 1px solid white;
+}
+
+.nav-btn2{
+    background-color: orange;
+    padding: 3px 30px;
+    color: white;
+    border: 1px solid white;
+    margin-left: 4px;
+}

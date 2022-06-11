@@ -4,6 +4,7 @@ import auth from '../../firebase.init';
 import { useSendPasswordResetEmail, useSignInWithEmailAndPassword} from 'react-firebase-hooks/auth';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import './Login.css';
 const Login = () => {
     const [
         signInWithEmailAndPassword,
@@ -48,12 +49,10 @@ const Login = () => {
         <div>
              <Container fluid>
                 <Row>
-                    <Col xs={12} md={7} lg={7}>
-                        <Image src="https://img.freepik.com/free-vector/tablet-login-concept-illustration_114360-7963.jpg?t=st=1650196997~exp=1650197597~hmac=178220bfbffdc22f466d193620b9c5e061140006c40c9d2efeea9656063e7d59&w=740" alt="" width="80%" />
-                    </Col>
-                    <Col xs={12} md={5} lg={5}>
+                <Col xs={12} md={5} lg={5}>
                         <div className="login-style">
-                            <h3 className='text-center'>Login</h3>
+                            <h3 className='text-center'>WELCOME BACK</h3>
+                            <p className='text-center mt-0 pt-0'><small>Login to Your Account</small></p>
                             <Form onSubmit={handleSignIn} className='w-75 mx-auto form-style'>
                                 <Form.Floating className="mb-3">
                                     <Form.Control
@@ -77,19 +76,22 @@ const Login = () => {
                                 </Form.Floating>
                                 {error && <p className='text-start text-danger'>{error.message}</p> }
                                 {message && <p className='text-start text-danger'>{message}</p> }
+                                
+                                <Button className='login-btn mt-3' type="submit">
+                                    Login
+                                </Button>
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <Form.Group className="" controlId="formBasicCheckbox">
                                         <Form.Check type="checkbox" label="Remember me" />
                                     </Form.Group>
                                     <Button onClick={handlePasswordReset} className='link-style' variant="link">Forgot Password</Button>
                                 </div>
-                                <Button className='login-btn' type="submit">
-                                    Login
-                                </Button>
-                                <p className='text-start'>Don't have an account? <Link className='link-style' to='/register'>Register Now</Link></p>
                             </Form>
                         </div>
                         
+                    </Col>
+                    <Col xs={12} md={7} lg={7}>
+                        <Image src="https://img.freepik.com/free-vector/tablet-login-concept-illustration_114360-7963.jpg?t=st=1650196997~exp=1650197597~hmac=178220bfbffdc22f466d193620b9c5e061140006c40c9d2efeea9656063e7d59&w=740" alt="" width="80%" />
                     </Col>
                 </Row>
             </Container>
